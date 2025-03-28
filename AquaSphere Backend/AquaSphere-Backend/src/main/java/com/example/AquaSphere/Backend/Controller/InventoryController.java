@@ -2,6 +2,7 @@ package com.example.AquaSphere.Backend.Controller;
 
 import com.example.AquaSphere.Backend.DTO.InventoryDto;
 import com.example.AquaSphere.Backend.Entity.InventoryEntity;
+import com.example.AquaSphere.Backend.Entity.ReviewEntity;
 import com.example.AquaSphere.Backend.Service.InventoryService;
 
 
@@ -112,5 +113,10 @@ public class InventoryController {
     public ResponseEntity<Void> deleteItem(@PathVariable String itemCode) {
         inventoryService.deleteItem(itemCode);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/viewallitems")
+    public List<InventoryEntity> getAllItems() {
+        return inventoryService.getAllItems();
     }
 }
