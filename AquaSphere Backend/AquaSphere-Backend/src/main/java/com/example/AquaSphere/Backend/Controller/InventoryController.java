@@ -115,6 +115,7 @@ public class InventoryController {
         return ResponseEntity.noContent().build();
     }
 
+
     @GetMapping("/viewallitems")
     public List<InventoryEntity> getAllItems() {
         return inventoryService.getAllItems();
