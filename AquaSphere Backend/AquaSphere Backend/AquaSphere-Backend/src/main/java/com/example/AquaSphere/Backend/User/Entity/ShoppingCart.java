@@ -24,7 +24,7 @@ public class ShoppingCart {
     private BigDecimal price;
 
     @Column(name = "user_id")
-    private Long userId;
+    private final Long userId;
 
     @Column(name = "admin_id")
     private Long adminId;
@@ -33,16 +33,10 @@ public class ShoppingCart {
     private LocalDateTime addedAt;
 
     // Constructors, getters, and setters
-    public ShoppingCart() {
-        this.addedAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public ShoppingCart(Long id, Long userId) {
         this.id = id;
+        this.userId = userId;
+        this.addedAt = LocalDateTime.now();
     }
 
     public Long getProductId() {
@@ -67,18 +61,6 @@ public class ShoppingCart {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getAdminId() {
-        return adminId;
     }
 
     public void setAdminId(Long adminId) {

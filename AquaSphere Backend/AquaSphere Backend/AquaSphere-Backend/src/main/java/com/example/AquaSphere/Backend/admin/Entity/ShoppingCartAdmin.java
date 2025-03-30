@@ -8,12 +8,15 @@ import java.math.BigDecimal;
 @DiscriminatorValue("ADMIN")
 public class ShoppingCartAdmin extends ShoppingCart {
 
+    private static final Long userId =null;
+    private static final Long id = null;
+
     public ShoppingCartAdmin() {
-        super();
+        super(id, userId);
     }
 
     public ShoppingCartAdmin(Long productId, int quantity, BigDecimal price, Long adminId) {
-        super();
+        super(id, userId);
         this.setProductId(productId);
         this.setQuantity(quantity);
         this.setPrice(price);

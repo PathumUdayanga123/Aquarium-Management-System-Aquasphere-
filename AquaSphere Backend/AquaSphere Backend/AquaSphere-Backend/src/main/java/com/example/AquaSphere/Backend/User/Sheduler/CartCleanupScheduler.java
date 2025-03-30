@@ -21,4 +21,5 @@ public class CartCleanupScheduler {
                 .filter(cart -> cart.getAddedAt().isBefore(thirtyDaysAgo))
                 .forEach(cartRepository::delete);
     }
+
 }

@@ -15,6 +15,8 @@ import java.util.Optional;
 public class ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
+    private Long id;
+    private Long userId;
 
     @Autowired
     public ShoppingCartService(ShoppingCartRepository shoppingCartRepository) {
@@ -22,7 +24,7 @@ public class ShoppingCartService {
     }
 
     public ShoppingCart addToCart(Long productId, int quantity, BigDecimal price, Long adminId) {
-        ShoppingCart cartItem = new ShoppingCart();
+        ShoppingCart cartItem = new ShoppingCart(id, userId);
         cartItem.setProductId(productId);
         cartItem.setQuantity(quantity);
         cartItem.setPrice(price);
