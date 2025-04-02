@@ -1,4 +1,4 @@
-package com.example.AquaSphere.Backend.Scheduler;
+package com.example.AquaSphere.Backend.Sheduler;
 
 import com.example.AquaSphere.Backend.Entity.ServiceReminderEntity;
 import com.example.AquaSphere.Backend.Repository.ServiceReminderRepository;
