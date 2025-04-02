@@ -1,5 +1,6 @@
 package com.example.AquaSphere.Backend.ServiceImplementation;
 
+import com.example.AquaSphere.Backend.DTO.LoginDTO;
 import com.example.AquaSphere.Backend.DTO.UserRegistrationDTO;
 import com.example.AquaSphere.Backend.DTO.UserUpdateDTO;
 import com.example.AquaSphere.Backend.Entity.User;
@@ -9,6 +10,7 @@ import com.example.AquaSphere.Backend.Repository.UserRepository;
 import com.example.AquaSphere.Backend.Service.EmailService;
 import com.example.AquaSphere.Backend.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,5 +136,19 @@ public class UserServiceImplementation implements UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+    }
+
+    @Override
+    public User login(LoginDTO loginDTO) {
+        // Find user by email
+        User user = userRepository.findByEmail(loginDTO.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("Invalid email or password"));
+
+        // Check if password matches
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+
+        return user;
     }
 }
