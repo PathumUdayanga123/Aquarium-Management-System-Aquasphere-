@@ -22,12 +22,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF protection entirely for simplicity
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // Configure which endpoints are accessible without authentication
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/users/register", "/api/users/verify-otp", "/api/users/login").permitAll()
+                        .requestMatchers(
+                                "/api/users/register",
+                                "/api/users/verify-otp",
+                                "/api/users/login",
+                                "/api/users/**"  // This allows all user endpoints without auth
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
 
