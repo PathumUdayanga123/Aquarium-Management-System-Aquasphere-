@@ -16,6 +16,7 @@ public class InventoryEntity {
     private Long id;
 
     private String itemType;
+
     private String itemName;
     private LocalDate itemAddDate;
     private String itemCode;

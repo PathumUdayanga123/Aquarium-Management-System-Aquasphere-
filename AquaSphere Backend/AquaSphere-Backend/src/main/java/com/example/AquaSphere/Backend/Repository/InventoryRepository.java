@@ -17,4 +17,6 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
 
 
     Optional<InventoryEntity> findByItemCode(String itemCode);
+
+
 }

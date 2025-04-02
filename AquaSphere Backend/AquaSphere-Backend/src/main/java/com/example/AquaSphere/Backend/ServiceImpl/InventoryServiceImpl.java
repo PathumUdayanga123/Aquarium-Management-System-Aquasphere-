@@ -92,5 +92,10 @@ public class InventoryServiceImpl implements InventoryService {
         item.ifPresent(inventoryRepository::delete);
     }
 
+    @Override
+    public Optional<InventoryEntity> getItemById(Long id) {
+        return inventoryRepository.findById(id);
+    }
+
 
 }

@@ -2,7 +2,7 @@ package com.example.AquaSphere.Backend.Controller;
 
 import com.example.AquaSphere.Backend.DTO.InventoryDto;
 import com.example.AquaSphere.Backend.Entity.InventoryEntity;
-import com.example.AquaSphere.Backend.Entity.ReviewEntity;
+
 import com.example.AquaSphere.Backend.Service.InventoryService;
 
 
@@ -69,6 +69,7 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.searchItemsByDescription(prefix));
     }
 
+
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<InventoryEntity> addItem(
             @RequestParam String itemType,
@@ -106,7 +107,7 @@ public class InventoryController {
             @RequestBody InventoryDto inventoryDto) {
         InventoryEntity updatedItem = inventoryService.updateItem(itemCode, inventoryDto);
         updatedItem.updateStockStatus(); // Update stock status after update
-        return updatedItem != null ? ResponseEntity.ok(updatedItem) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updatedItem);
     }
 
     @DeleteMapping("/delete/{itemCode}")
@@ -119,5 +120,12 @@ public class InventoryController {
     @GetMapping("/viewallitems")
     public List<InventoryEntity> getAllItems() {
         return inventoryService.getAllItems();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<InventoryEntity> getItemById(@PathVariable Long id) {
+        return inventoryService.getItemById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

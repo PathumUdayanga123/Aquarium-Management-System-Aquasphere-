@@ -7,6 +7,7 @@ import com.example.AquaSphere.Backend.Entity.ReviewEntity;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InventoryService {
     List<InventoryEntity> getAllItems(); // Get all items
@@ -20,7 +21,10 @@ public interface InventoryService {
     void deleteItem(String itemCode); // Delete item
 
     List<InventoryEntity> searchItemsByDescription(String prefix);
-    // Method to search by itemDescription
+
+    Optional<InventoryEntity> getItemById(Long id); // Get item by ID
+
+
 
 
 

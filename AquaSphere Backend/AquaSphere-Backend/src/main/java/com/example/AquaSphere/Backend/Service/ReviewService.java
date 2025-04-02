@@ -9,4 +9,6 @@ public interface ReviewService {
     List<ReviewEntity> getAllDetails();
 
     ReviewEntity saveDetails(ReviewEntity reviewEntity);
+
+    void deleteItem(String reviewId);
 }
