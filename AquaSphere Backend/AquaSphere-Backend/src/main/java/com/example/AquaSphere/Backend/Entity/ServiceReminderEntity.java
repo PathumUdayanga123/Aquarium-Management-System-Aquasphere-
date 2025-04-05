@@ -44,5 +44,8 @@ public class ServiceReminderEntity {
     private LocalDate service_date;
 
     @Column(name = "service_time")
-    private LocalTime service_time;
+    private LocalTime service_time; // Changed from LocalTime to String
+
+    @Column(name = "applicant_district")
+    private String applicant_district;
 }

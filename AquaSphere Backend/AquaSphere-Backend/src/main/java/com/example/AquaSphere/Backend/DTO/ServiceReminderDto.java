@@ -19,4 +19,5 @@ public class ServiceReminderDto {
     private String service_status;
     private LocalDate service_date;
     private LocalTime service_time;
+    private String applicant_district;
 }

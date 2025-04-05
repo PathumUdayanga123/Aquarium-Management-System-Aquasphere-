@@ -26,12 +26,17 @@ public class ServiceReminderImpl implements ServiceReminderService {
         }
 
         return allRecords.stream()
-                .filter(service -> service.getService_status() == null || service.getService_status().trim().isEmpty()) // Improved null check
+                .filter(service -> service.getService_status() == null || service.getService_status().trim().isEmpty())
                 .collect(Collectors.toList());
     }
 
     @Override
     public ServiceReminderEntity saveDetails(ServiceReminderEntity serviceReminderEntity) {
+        // Ensure a default status if it's null or empty
+        if (serviceReminderEntity.getService_status() == null || serviceReminderEntity.getService_status().trim().isEmpty()) {
+            serviceReminderEntity.setService_status("Pending");
+        }
+
         return serviceReminderRepository.save(serviceReminderEntity);
     }
 }
