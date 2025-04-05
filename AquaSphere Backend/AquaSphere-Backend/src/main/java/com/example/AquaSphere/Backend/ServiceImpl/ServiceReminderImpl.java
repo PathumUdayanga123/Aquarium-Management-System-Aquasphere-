@@ -26,7 +26,7 @@ public class ServiceReminderImpl implements ServiceReminderService {
         }
 
         return allRecords.stream()
-                .filter(service -> service.getService_status() == null || service.getService_status().trim().isEmpty())
+                .filter(service -> service.getService_status() != null && service.getService_status().equals("Pending"))
                 .collect(Collectors.toList());
     }
 

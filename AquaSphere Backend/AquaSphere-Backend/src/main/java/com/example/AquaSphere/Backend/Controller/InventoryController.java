@@ -64,10 +64,17 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getItemsByCategory("Tank"));
     }
 
+    @GetMapping("/Certified_Fish")
+    public ResponseEntity<List<InventoryEntity>> getCertified_FishItems() {
+        return ResponseEntity.ok(inventoryService.getItemsByCategory("Certified_Fish"));
+    }
+
     @GetMapping("/search/{prefix}")
     public ResponseEntity<List<InventoryEntity>> searchItems(@PathVariable String prefix) {
         return ResponseEntity.ok(inventoryService.searchItemsByDescription(prefix));
     }
+
+
 
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
