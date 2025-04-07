@@ -151,4 +151,10 @@ public class UserServiceImplementation implements UserService {
 
         return user;
     }
+    @Override
+    public void logout(Long userId) {
+        // You can add logout timestamp, logging, etc. here
+        System.out.println("User " + userId + " logged out at " + LocalDateTime.now());
+    }
+
 }

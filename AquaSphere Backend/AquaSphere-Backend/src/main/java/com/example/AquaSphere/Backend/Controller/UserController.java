@@ -100,5 +100,20 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password");
         }
+
+
     }
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId != null) {
+            userService.logout(userId); // call service if you want
+            session.invalidate();
+            return ResponseEntity.ok("Logged out successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("No user is currently logged in.");
+        }
+    }
+
 }

@@ -22,4 +22,6 @@ public interface UserService {
     User getUserById(Long userId);
 
     User login(LoginDTO loginDTO);
+
+    void logout(Long userId);
 }
