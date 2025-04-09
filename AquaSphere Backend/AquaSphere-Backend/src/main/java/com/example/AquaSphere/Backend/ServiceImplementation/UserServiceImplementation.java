@@ -43,6 +43,9 @@ public class UserServiceImplementation implements UserService {
         newUser.setNic(registrationDTO.getNic());
         newUser.setContactNo(registrationDTO.getContactNo());
 
+        // Set role (default is USER if not specified)
+        newUser.setRole(registrationDTO.getRole() != null ? registrationDTO.getRole() : "USER");
+
         // Encode password
         newUser.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
 
@@ -56,6 +59,14 @@ public class UserServiceImplementation implements UserService {
 
         // Save user
         return userRepository.save(newUser);
+    }
+
+    @Override
+    @Transactional
+    public User registerNewAdmin(UserRegistrationDTO registrationDTO) throws UserAlreadyExistsException {
+        // Ensure role is set to ADMIN regardless of what was passed
+        registrationDTO.setRole("ADMIN");
+        return registerNewUser(registrationDTO);
     }
 
     @Override
@@ -151,10 +162,10 @@ public class UserServiceImplementation implements UserService {
 
         return user;
     }
+
     @Override
     public void logout(Long userId) {
         // You can add logout timestamp, logging, etc. here
         System.out.println("User " + userId + " logged out at " + LocalDateTime.now());
     }
-
 }

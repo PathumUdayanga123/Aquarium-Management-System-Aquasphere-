@@ -87,12 +87,14 @@ public class UserController {
             // Store user info in session
             session.setAttribute("userId", user.getId());
             session.setAttribute("userEmail", user.getEmail());
+            session.setAttribute("userRole", user.getRole());
 
             // Create response with user details (excluding sensitive info)
             Map<String, Object> response = new HashMap<>();
             response.put("id", user.getId());
             response.put("name", user.getName());
             response.put("email", user.getEmail());
+            response.put("role", user.getRole());
             response.put("message", "Login successful");
 
             return ResponseEntity.ok(response);
@@ -100,9 +102,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password");
         }
-
-
     }
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
@@ -115,5 +116,4 @@ public class UserController {
             return ResponseEntity.badRequest().body("No user is currently logged in.");
         }
     }
-
 }

@@ -42,4 +42,7 @@ public class User {
 
     @Column
     private LocalDateTime otpGeneratedTime;
+
+    @Column(nullable = false)
+    private String role = "USER"; // Default role is USER
 }

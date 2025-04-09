@@ -24,4 +24,6 @@ public interface UserService {
     User login(LoginDTO loginDTO);
 
     void logout(Long userId);
+
+    User registerNewAdmin(UserRegistrationDTO registrationDTO);
 }

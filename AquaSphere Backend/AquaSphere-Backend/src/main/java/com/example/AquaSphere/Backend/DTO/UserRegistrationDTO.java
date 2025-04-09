@@ -17,6 +17,7 @@ public class UserRegistrationDTO {
     private String nic;
     private String password;
     private String contactNo;
+    private String role = "USER"; // Default role
 
 }
 

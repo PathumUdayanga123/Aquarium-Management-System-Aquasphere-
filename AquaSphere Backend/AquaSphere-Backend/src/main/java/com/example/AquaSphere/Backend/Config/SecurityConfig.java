@@ -31,6 +31,9 @@ public class SecurityConfig {
                                 "/api/users/**"  // This allows all user endpoints without auth
                         ).permitAll()
                         .anyRequest().authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
                 );
 
         return http.build();
