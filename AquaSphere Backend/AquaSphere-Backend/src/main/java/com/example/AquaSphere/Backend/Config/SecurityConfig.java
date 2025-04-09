@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @EnableWebSecurity
 @Configuration
@@ -28,9 +26,9 @@ public class SecurityConfig {
                                 "/api/users/register",
                                 "/api/users/verify-otp",
                                 "/api/users/login",
-                                "/api/users/**"  // This allows all user endpoints without auth
+                                "/api/users/logout",
+                                "/api/users/**","/api/admin/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
