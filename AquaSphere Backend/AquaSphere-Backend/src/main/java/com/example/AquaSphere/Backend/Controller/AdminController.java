@@ -1,6 +1,7 @@
 package com.example.AquaSphere.Backend.Controller;
 
 import com.example.AquaSphere.Backend.DTO.UserRegistrationDTO;
+import com.example.AquaSphere.Backend.DTO.UserUpdateDTO;
 import com.example.AquaSphere.Backend.Entity.User;
 import com.example.AquaSphere.Backend.Exception.UserAlreadyExistsException;
 import com.example.AquaSphere.Backend.Service.UserService;
@@ -30,6 +31,15 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<User> updateUser(
+            @PathVariable Long userId,
+            @RequestBody UserUpdateDTO userUpdateDTO
+    ) {
+        User updatedUser = userService.updateUser(userId, userUpdateDTO);
+        return ResponseEntity.ok(updatedUser);
+    }
+
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
@@ -48,6 +58,4 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
 }
