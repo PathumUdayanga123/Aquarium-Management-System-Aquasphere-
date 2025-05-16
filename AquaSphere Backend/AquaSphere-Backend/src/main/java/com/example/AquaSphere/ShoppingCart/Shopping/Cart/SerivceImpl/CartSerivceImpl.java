@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,7 +84,7 @@ public class CartSerivceImpl implements CartService {
         CartItem item = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
 
-        if (!item.getitemType().equals(userId)) {
+        if (!Objects.equals(item.getUserId(), userId)) {
             throw new RuntimeException("Unauthorized access to cart item");
         }
 

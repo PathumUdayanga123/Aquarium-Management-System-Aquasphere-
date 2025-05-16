@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -19,22 +21,40 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Custom CSRF handler for stateless REST API
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName(null); // Disables CSRF token in request attribute
+
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disabling CSRF for simplicity in API (enable for production)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/products/**").permitAll() // Public access to product listings
-                        .requestMatchers("/api/cart/**").authenticated() // Cart operations require authentication
-                        .anyRequest().authenticated() // All other requests require authentication
+                // CSRF configuration for REST API
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(requestHandler)
+                        .ignoringRequestMatchers("/api/products/**") // Public endpoints don't need CSRF
                 )
-                .httpBasic(httpBasic -> {}); // Enable basic authentication
+
+                // Authorization configuration
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/products/**").permitAll() // Public access
+                        .requestMatchers("/api/cart/**").hasRole("USER") // Only authenticated users
+                        .anyRequest().authenticated() // All other requests need authentication
+                )
+
+                // HTTP Basic Authentication
+                .httpBasic(httpBasic -> httpBasic
+                        .realmName("AquaSphere Shopping Cart")
+                )
+
+                // Session management
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // In-memory user store for demonstration
-        // In a real application, replace with database-backed user service
         UserDetails user = User.builder()
                 .username("user")
                 .password(passwordEncoder().encode("password"))
@@ -44,7 +64,7 @@ public class SecurityConfig {
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
+                .roles("ADMIN", "USER") // Admin has both roles
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin);

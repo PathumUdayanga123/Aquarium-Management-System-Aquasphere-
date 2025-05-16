@@ -3,12 +3,17 @@ package com.example.aquaSphere.ShoppingCart.Shopping.Cart.Controller;
 import com.example.aquaSphere.ShoppingCart.Shopping.Cart.DTO.AddToCartDto;
 import com.example.aquaSphere.ShoppingCart.Shopping.Cart.DTO.CartResponseDto;
 import com.example.aquaSphere.ShoppingCart.Shopping.Cart.Service.CartService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
+@CrossOrigin("*")
 public class CartController {
 
     private final CartService cartService;
@@ -18,42 +23,46 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping
-    public ResponseEntity<CartResponseDto> getCart() {
-        // In a real app, get userId from authenticated user
-        Long userId = 1L; // Mock user ID for demonstration
-        return ResponseEntity.ok(cartService.getCart(userId));
+    private String getAuthenticatedUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName(); // Returns the username
+        }
+        throw new SecurityException("User not authenticated");
     }
 
-    @PostMapping
-    public ResponseEntity<CartResponseDto> addToCart(@RequestBody AddToCartDto addToCartDto) {
-        // In a real app, get userId from authenticated user
-        Long userId = 1L; // Mock user ID for demonstration
-        return ResponseEntity.ok(cartService.addToCart(userId, addToCartDto));
+    @GetMapping
+    public ResponseEntity<CartResponseDto> getCart() {
+        String username = getAuthenticatedUsername();
+        CartResponseDto cart = cartService.getCart(Long.valueOf(username));
+        return ResponseEntity.ok(cart);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<CartResponseDto> addToCart(@Valid @RequestBody AddToCartDto addToCartDto) {
+        String username = getAuthenticatedUsername();
+        CartResponseDto updateCart = cartService.addToCart(Long.valueOf(username), addToCartDto);
+        return ResponseEntity.ok(updateCart);
     }
 
     @PutMapping("/{itemId}")
     public ResponseEntity<CartResponseDto> updateCartItem(
             @PathVariable Long itemId,
             @RequestParam Integer quantity) {
-        // In a real app, get userId from authenticated user
-        Long userId = 1L; // Mock user ID for demonstration
-        return ResponseEntity.ok(cartService.updateCartItem(userId, itemId, quantity));
+        String username = getAuthenticatedUsername();
+        return ResponseEntity.ok(cartService.updateCartItem(Long.valueOf(username), itemId, quantity));
     }
 
     @DeleteMapping("/{itemId}")
     public ResponseEntity<CartResponseDto> removeFromCart(@PathVariable Long itemId) {
-        // In a real app, get userId from authenticated user
-        Long userId = 1L; // Mock user ID for demonstration
-        return ResponseEntity.ok(cartService.removeFromCart(userId, itemId));
+        String username = getAuthenticatedUsername();
+        return ResponseEntity.ok(cartService.removeFromCart(Long.valueOf(username), itemId));
     }
 
     @DeleteMapping
     public ResponseEntity<Void> clearCart() {
-        // In a real app, get userId from authenticated user
-        Long userId = 1L; // Mock user ID for demonstration
-        cartService.clearCart(userId);
+        String username = getAuthenticatedUsername();
+        cartService.clearCart(Long.valueOf(username));
         return ResponseEntity.noContent().build();
     }
 }
-

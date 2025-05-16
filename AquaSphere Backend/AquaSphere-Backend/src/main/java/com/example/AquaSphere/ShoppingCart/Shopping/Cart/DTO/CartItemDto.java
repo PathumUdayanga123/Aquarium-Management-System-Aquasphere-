@@ -19,6 +19,9 @@ public class CartItemDto {
     public <R> CartItemDto(Long id, R getitemName, String s, String s1, Integer quantity, Integer getitemPrice, int i) {
     }
 
+    public CartItemDto(Long id, Long id1, String name, String imageUrl, int quantity, Double price, double v) {
+    }
+
     public Long getId() {
         return id;
     }

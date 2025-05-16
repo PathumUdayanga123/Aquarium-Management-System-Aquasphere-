@@ -1,31 +1,29 @@
 package com.example.aquaSphere.ShoppingCart.Shopping.Cart.Controller;
 
-import com.example.aquaSphere.ShoppingCart.Shopping.Cart.DTO.AddToCartDto;
 import com.example.aquaSphere.ShoppingCart.Shopping.Cart.Entity.Product;
 import com.example.aquaSphere.ShoppingCart.Shopping.Cart.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin("*")
 public class ProductController {
 
     private final ProductRepository productRepository;
-    private Object Product;
 
     @Autowired
     public ProductController(ProductRepository productRepository) {
+
         this.productRepository = productRepository;
     }
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
+
         return ResponseEntity.ok(productRepository.findAll());
     }
 
@@ -42,4 +40,5 @@ public class ProductController {
         return ResponseEntity.ok(createdProduct);
 
     }
+
 }
